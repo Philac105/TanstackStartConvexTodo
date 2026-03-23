@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import type { Id } from "../convex/_generated/dataModel";
@@ -10,7 +10,7 @@ export function TodoApp() {
   const toggleTodo = useMutation(api.todos.toggleTodo);
   const deleteTodo = useMutation(api.todos.deleteTodo);
 
-  const handleAddTodo = async (e: React.FormEvent) => {
+  const handleAddTodo = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
     try {
