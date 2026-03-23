@@ -1,0 +1,15 @@
+# Bun configuration for TanStack Start + Convex
+
+root = "."
+srcDir = "./src"
+outDir = "./dist"
+
+[server]
+port = 3000
+hot = true
+
+[packages]
+auto = "accurate"
+
+[npm]
+# Link local packages
