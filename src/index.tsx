@@ -3,7 +3,13 @@ import ReactDOM from "react-dom/client";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { TodoApp } from "./app";
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL || "http://localhost:8200");
+const convexUrl = import.meta.env.VITE_CONVEX_URL;
+
+if (!convexUrl) {
+  throw new Error("Missing VITE_CONVEX_URL. Set it in .env or .env.local.");
+}
+
+const convex = new ConvexReactClient(convexUrl);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

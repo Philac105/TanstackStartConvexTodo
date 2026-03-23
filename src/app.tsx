@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
-import type { Doc } from "../convex/_generated/dataModel";
+import type { Id } from "../convex/_generated/dataModel";
 
 export function TodoApp() {
   const [input, setInput] = useState("");
-  const todos = useQuery(api.todos.getTodos) as Doc<"todos">[];
+  const todos = useQuery(api.todos.getTodos) ?? [];
   const addTodo = useMutation(api.todos.addTodo);
   const toggleTodo = useMutation(api.todos.toggleTodo);
   const deleteTodo = useMutation(api.todos.deleteTodo);
@@ -21,24 +21,24 @@ export function TodoApp() {
     }
   };
 
-  const handleToggle = async (id: string) => {
+  const handleToggle = async (id: Id<"todos">) => {
     try {
-      await toggleTodo({ id: id as any });
+      await toggleTodo({ id });
     } catch (error) {
       console.error("Failed to toggle todo:", error);
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: Id<"todos">) => {
     try {
-      await deleteTodo({ id: id as any });
+      await deleteTodo({ id });
     } catch (error) {
       console.error("Failed to delete todo:", error);
     }
   };
 
-  const completedCount = todos?.filter((t) => t.completed).length || 0;
-  const totalCount = todos?.length || 0;
+  const completedCount = todos.filter((t) => t.completed).length;
+  const totalCount = todos.length;
 
   return (
     <div style={{ maxWidth: "500px", margin: "40px auto", fontFamily: "system-ui" }}>
@@ -48,7 +48,7 @@ export function TodoApp() {
         <input
           type="text"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => setInput(e.currentTarget.value)}
           placeholder="Add a new todo..."
           style={{
             padding: "8px",
@@ -74,7 +74,7 @@ export function TodoApp() {
       </div>
 
       <ul style={{ listStyle: "none", padding: 0 }}>
-        {todos?.map((todo) => (
+        {todos.map((todo) => (
           <li
             key={todo._id}
             style={{
@@ -117,7 +117,7 @@ export function TodoApp() {
         ))}
       </ul>
 
-      {(!todos || todos.length === 0) && (
+      {todos.length === 0 && (
         <div style={{ textAlign: "center", color: "#999", padding: "20px" }}>
           No todos yet. Add one to get started!
         </div>
